@@ -1,11 +1,8 @@
 package com.amap.androidobackgroundlocation;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -24,8 +21,9 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
+
+import dc.common.Logger;
 
 /**
  * 高精度定位模式功能演示
@@ -229,9 +227,9 @@ public class MainActivity extends CheckPermissionsActivity
 	AMapLocationListener locationListener = new AMapLocationListener() {
 		@Override
 		public void onLocationChanged(AMapLocation location) {
+			StringBuffer sb = new StringBuffer();
 			if (null != location) {
 
-				StringBuffer sb = new StringBuffer();
 				//errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
 				if(location.getErrorCode() == 0){
 					sb.append("定位成功" + "\n");
@@ -274,8 +272,11 @@ public class MainActivity extends CheckPermissionsActivity
 				String result = sb.toString();
 				tvResult.setText(result);
 			} else {
+				sb.append(location.getErrorCode());
+				sb.append(location.getErrorInfo());
 				tvResult.setText("定位失败，loc is null");
 			}
+			Logger.w(sb.toString());
 		}
 	};
 
